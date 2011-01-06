@@ -2,16 +2,17 @@
 /**
  * CodeIgniter Minify
  *
- * @package		ci-min
+ * @package		ci-minify
  * @author		Eric Barnes
  * @copyright	Copyright (c) Eric Barnes
  * @since		Version 1.0
+ * @link 		https://github.com/ericbarnes/ci-minify
  */
 
 // ------------------------------------------------------------------------
 
 /**
- * Admin Home Controller
+ * Example Controller
  *
  * @subpackage	Controllers
  */
