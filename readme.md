@@ -1,14 +1,14 @@
 # CodeIgniter Minify
 
-The goal of this project is to provide a simple way to minify and combine js and css files.
+The goal of this project is to provide a simple way to minify and combine js and css files inside a CodeIgniter application
 
 ## Installation
 
-Upload the Minify folder to your libraries folder. This is built using CI2 packages and you must be using CI2 and have php 5.2 installed.
+Upload the Minify folder to your libraries folder. This is built using CI2 packages and you must be using CI2.
 
 ## Usage
 
-I have included an example controller to show usage but below is an overview:
+Below is an overview of different usages:
 
 <pre>
 // Minify JS file
@@ -37,3 +37,13 @@ $file = 'test/css/colorbox.css';
 $contents = $this->minify->js->min($file);
 $this->minify->save_file($contents, 'test/css/all.css');
 </pre>
+
+<pre>
+// Minify an entire directory
+$this->load->driver('minify');
+$this->minify->combine_directory('test/css/, 'all.css');
+</pre>
+
+## Credits
+
+JS-Min - https://github.com/rgrove/jsmin-php
