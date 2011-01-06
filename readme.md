@@ -12,38 +12,38 @@ Upload the Minify folder to your libraries folder. This is built using CI2 packa
 
 Below is an overview of different usages:
 
+Minify JS file
 <pre>
-// Minify JS file
 $this->load->driver('minify');
 $file = 'test/js/colorbox.js';
 echo $this->minify->js->min($file);
 </pre>
 
+Minify CSS file
 <pre>
-// Minify CSS file
 $this->load->driver('minify');
 $file = 'test/css/colorbox.css';
 echo $this->minify->js->min($file);
 </pre>
 
+Minify and combine an array of files. Useful if you need files to be in a certain order.
 <pre>
-// Minify and combine directory of files
 $this->load->driver('minify');
-$this->minify->combine_directory('test/css');
+$this->minify->combine_files(array('test/css/calendar.css', 'test/css/colorbox.css');
 </pre>
 
+Minify and save a physical file
 <pre>
-// Minify and save a physical file
 $this->load->driver('minify');
 $file = 'test/css/colorbox.css';
 $contents = $this->minify->js->min($file);
 $this->minify->save_file($contents, 'test/css/all.css');
 </pre>
 
+Minify an entire directory. The second param is an array of ignored files.
 <pre>
-// Minify an entire directory
 $this->load->driver('minify');
-$this->minify->combine_directory('test/css/, 'all.css');
+$this->minify->combine_directory('test/css/, array('all.css'));
 </pre>
 
 ## Credits
