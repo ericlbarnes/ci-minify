@@ -62,6 +62,7 @@ class Minify extends CI_Driver_Library {
 		}
 
 		$contents = '';
+		$fileCount = 0;
 
 		foreach ($files AS $file)
 		{
