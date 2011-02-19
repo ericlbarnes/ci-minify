@@ -65,20 +65,27 @@ class Minify extends CI_Driver_Library {
 
 		foreach ($files AS $file)
 		{
+			$fileCount++;
+
 			if ($type == '')
 			{
 				$type = $this->_get_type($file);
 			}
 
-			$contents .= '// '.pathinfo($file, PATHINFO_BASENAME)."\n";
+			$pathInf = pathinfo($file, PATHINFO_BASENAME);
 
 			if ($type == 'css')
 			{
-				$contents .= $this->css->min($file)."\n\n";
+				// only one charset is allowed (Minify_css driver yet remove all charsets)
+				if ($fileCount == 1) {
+					$contents .= '@charset "utf-8";' . "\n\n";
+				}
+				$contents .= '/* @fileRef ' . $pathInf . ' */' . "\n";
+				$contents .= $this->css->min($file) . "\n\n";
 			}
 			elseif ($type == 'js')
 			{
-				$contents .= $this->js->min($file)."\n\n";
+				$contents .= '// @fileRef ' . $pathInf . ' ' . "\n" . $this->js->min($file)."\n\n";
 			}
 			else
 			{

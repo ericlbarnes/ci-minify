@@ -56,6 +56,9 @@ class Minify_css extends CI_Driver {
 	 */
 	private function _compress($contents)
 	{
+		// First of all remove multiple charset declarations for standards compliance (and fixing Safari problems).
+		$contents = preg_replace('/^@charset\s+[\'"](\S*)\b[\'"];/i', '', $contents);
+
 		// remove comments
 		$contents = preg_replace('!/\*[^*]*\*+([^/][^*]*\*+)*/!', '', $contents);
 		// remove tabs, spaces, newlines, etc.
