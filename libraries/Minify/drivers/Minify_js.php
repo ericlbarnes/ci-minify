@@ -3,10 +3,11 @@
  * CodeIgniter Minify
  *
  * @package		ci-minify
- * @author		Eric Barnes
+ * @author		Eric Barnes, F.S.Encinas
  * @copyright	Copyright (c) Eric Barnes
  * @since		Version 1.0
  * @link 		https://github.com/ericbarnes/ci-minify
+ *       		https://github.com/fsencinas/ci-minify
  */
 
 // ------------------------------------------------------------------------
@@ -36,7 +37,7 @@ class Minify_js extends CI_Driver {
 	 * @param	string $file
 	 * @return 	string
 	 */
-	public function min($file = '')
+	public function min($file = '', $compact = TRUE)
 	{
 		if ($file == '' OR ! file_exists($file))
 		{
@@ -44,7 +45,16 @@ class Minify_js extends CI_Driver {
 			return FALSE;
 		}
 
-		return JSMin::minify(file_get_contents($file));
+		$contents = file_get_contents($file);
+
+		if ( $compact != FALSE )
+		{
+			return trim(JSMin::minify($contents)) . "\n";
+		}
+		else
+		{
+			return "\n" . trim($contents) . "\n\n";
+		}
 	}
 }
 
