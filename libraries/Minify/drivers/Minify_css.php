@@ -3,10 +3,11 @@
  * CodeIgniter Minify
  *
  * @package		ci-minify
- * @author		Eric Barnes
+ * @author		Eric Barnes, F.S. Encinas
  * @copyright	Copyright (c) Eric Barnes
  * @since		Version 1.0
- * @link 		https://github.com/ericbarnes/ci-minify
+ * @link		https://github.com/ericbarnes/ci-minify
+ *      		https://github.com/fsencinas/ci-minify/
  */
 
 // ------------------------------------------------------------------------
@@ -28,42 +29,115 @@ class Minify_css extends CI_Driver {
 	/**
 	 * Min
 	 *
-	 * Minify a js file
+	 * Minify a CSS file
 	 *
+	 * @author	F.S.Encinas
 	 * @param	string $file
+	 * @param	bool $compact
 	 * @return 	string
 	 */
-	public function min($file = '')
+	public function min($file = '', $compact = TRUE)
 	{
-		if ($file == '' OR ! file_exists($file))
+		if ($file == '' OR !file_exists($file))
 		{
-			log_message('error', 'Minify_css->min missing file');
+			log_message('error', 'Minify_css->min missing file ' . $file);
 			return FALSE;
 		}
 
-		return $this->_compress(file_get_contents($file));
+		$contents = $this->removeCharsets(file_get_contents($file));
+
+		if ( $compact != FALSE )
+		{
+			return trim($this->_optimize($contents)) . "\n";
+		}
+		else
+		{
+			return "\n" . trim($contents) . "\n\n";
+		}
 	}
 
 	// ------------------------------------------------------------------------
 
 	/**
-	 * Compress
-	 *
-	 * Compress the contents of a css file
-	 *
+	 * Remove charsets
+	 * charset declarations removal to support do combine function
+	 * in order to set a new one user defined charset at the beggining of the document
+	 * to keep standars compliance (and fix Webkit buggy behaviours)
+	 * @author	F.S.Encinas
+	 * @param	string $contents
+	 * @return	string
+	 */
+	private function removeCharsets($contents)	{
+
+		return preg_replace('/^@charset\s+[\'"](\S*)\b[\'"];/i', '', $contents);
+
+	}
+
+	// ------------------------------------------------------------------------
+
+	/**
+	 * Optimize
+	 * Optimize the contents of a css file
+	 * based on Drupal 7 CSS Core aggregator
+	 * @author	F.S.Encinas
 	 * @param	string $contents
 	 * @return 	string
 	 */
-	private function _compress($contents)
+	private function _optimize($contents)
 	{
-		// First of all remove multiple charset declarations for standards compliance (and fixing Safari problems).
-		$contents = preg_replace('/^@charset\s+[\'"](\S*)\b[\'"];/i', '', $contents);
+		// Perform some safe CSS optimizations.
+		// Regexp to match comment blocks.
+		$comment     = '/\*[^*]*\*+(?:[^/*][^*]*\*+)*/';
+		// Regexp to match double quoted strings.
+		$double_quot = '"[^"\\\\]*(?:\\\\.[^"\\\\]*)*"';
+		// Regexp to match single quoted strings.
+		$single_quot = "'[^'\\\\]*(?:\\\\.[^'\\\\]*)*'";
+		// Strip all comment blocks, but keep double/single quoted strings.
+		$contents = preg_replace(
+			"<($double_quot|$single_quot)|$comment>Ss",
+			"$1",
+			$contents
+		);
+		// Remove certain whitespace.
+		// There are different conditions for removing leading and trailing
+		// whitespace.
+		// @see http://php.net/manual/en/regexp.reference.subpatterns.php
+		$contents = preg_replace_callback(
+			'<' .
+			# Strip leading and trailing whitespace.
+			'\s*([@{};,])\s*' .
+			# Strip only leading whitespace from:
+			# - Closing parenthesis: Retain "@media (bar) and foo".
+			'| \s+([\)])' .
+			# Strip only trailing whitespace from:
+			# - Opening parenthesis: Retain "@media (bar) and foo".
+			# - Colon: Retain :pseudo-selectors.
+			'| ([\(:])\s+' .
+			'>xS',
+			array(get_class($this), '_optimizeCB'),
+			$contents
+		);
 
-		// remove comments
-		$contents = preg_replace('!/\*[^*]*\*+([^/][^*]*\*+)*/!', '', $contents);
-		// remove tabs, spaces, newlines, etc.
-		$contents = str_replace(array("\r\n", "\r", "\n", "\t", '  ', '    ', '    '), '', $contents);
 		return $contents;
+	}
+
+	/**
+	 * Optimize CB
+	 * Optimize Callback Helper companion for optimize fn
+	 * based on Drupal 7 CSS Core aggregator
+	 * 
+	 * @author	F.S.Encinas
+	 * @param	string $matches
+	 * @return 	array
+	 */
+	private function _optimizeCB($matches) {
+
+		// Discard the full match.
+		unset($matches[0]);
+
+		// Use the non-empty match.
+		return current(array_filter($matches));
+
 	}
 }
 
