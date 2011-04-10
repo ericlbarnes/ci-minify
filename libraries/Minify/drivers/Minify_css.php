@@ -36,7 +36,7 @@ class Minify_css extends CI_Driver {
 	 * @param	bool $compact
 	 * @return 	string
 	 */
-	public function min($file = '', $compact = TRUE)
+	public function min($file = '', $compact = TRUE, $isaggregated = NULL)
 	{
 		if ($file == '' OR !file_exists($file))
 		{
@@ -44,7 +44,14 @@ class Minify_css extends CI_Driver {
 			return FALSE;
 		}
 
-		$contents = $this->removeCharsets(file_get_contents($file));
+		if (!isset($isaggregated))
+		{
+			$contents = file_get_contents($file);
+		}
+		else
+		{
+			$contents = $this->removeCharsets(file_get_contents($file));
+		}
 
 		if ( $compact != FALSE )
 		{

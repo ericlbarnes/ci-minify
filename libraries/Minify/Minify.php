@@ -161,7 +161,7 @@ class Minify extends CI_Driver_Library {
 					$contents .= '@charset "'. $cssCharset .'";' . "\n";
 				}
 				$contents .= "\n" . '/* @fileRef ' . $pathInf . ' */' . "\n";
-				$contents .= $this->css->min($file, $compact);
+				$contents .= $this->css->min($file, $compact, $isaggregated = TRUE);
 			}
 			elseif ($type == 'js')
 			{

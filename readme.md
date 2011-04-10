@@ -55,7 +55,7 @@ combine_directory($directory, [ignore], [type], [compact], [cssCharset]);
 Common:
 <pre>
 [type]: string ('css' or 'js')
-[compact] : bool (TRUE, FALSE). TRUE Compact/compress output, FALSE does'nt compress output (only aggregation)
+[compact] : bool (TRUE, FALSE). TRUE Compact/compress output, FALSE doesn't compress output (only aggregation)
 [cssCharset] : string (default 'utf-8'). If CSS you can force a starting single charset declaration (when aggregate files)
                due to the charset pre-removal (for stantdars compliance and Webkit bugfix prevention)
                set to null or leave empty if JS.
