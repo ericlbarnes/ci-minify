@@ -23,27 +23,46 @@ Minify CSS file
 <pre>
 $this->load->driver('minify');
 $file = 'test/css/test1.css';
-echo $this->minify->js->min($file);
+echo $this->minify->css->min($file);
 </pre>
 
 Minify and combine an array of files. Useful if you need files to be in a certain order.
 <pre>
 $this->load->driver('minify');
-echo $this->minify->combine_files(array('test/css/test2.css', 'test/css/test1.css'));
+$files = array('test/css/test2.css', 'test/css/test1.css');
+echo $this->minify->combine_files($files, [optionalParams]);
 </pre>
 
 Minify and save a physical file
 <pre>
 $this->load->driver('minify');
 $file = 'test/css/test1.css';
-$contents = $this->minify->js->min($file);
+$contents = $this->minify->css->min($file);
 $this->minify->save_file($contents, 'test/css/all.css');
 </pre>
 
 Minify an entire directory. The second param is an array of ignored files.
 <pre>
 $this->load->driver('minify');
-echo $this->minify->combine_directory('test/css/, array('all.css'));
+echo $this->minify->combine_directory('test/css/, array('all.css'), [optionalParams]);
+</pre>
+
+Optional Params
+<pre>
+combine_files($files, [type], [compact], [cssCharset]);
+combine_directory($directory, [ignore], [type], [compact], [cssCharset]);
+</pre>
+Common:
+<pre>
+[type]: string ('css' or 'js')
+[compact] : bool (TRUE, FALSE). TRUE Compact/compress output, FALSE does'nt compress output (only aggregation)
+[cssCharset] : string (default 'utf-8'). If CSS you can force a starting single charset declaration (when aggregate files)
+               due to the charset pre-removal (for stantdars compliance and Webkit bugfix prevention)
+               set to null or leave empty if JS.
+</pre>
+Combine dir:
+<pre>
+[ignore] : array with files to ignore
 </pre>
 
 ## Credits
