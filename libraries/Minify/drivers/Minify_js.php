@@ -63,7 +63,7 @@ class Minify_js extends CI_Driver {
  * same terms as jsmin.c, which has the following license:
  *
  * --
- * Copyright (c) 2002 Douglas Crockford	 (www.crockford.com)
+ * Copyright (c) 2002 Douglas Crockford  (www.crockford.com)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
@@ -92,247 +92,282 @@ class Minify_js extends CI_Driver {
  * @copyright 2008 Ryan Grove <ryan@wonko.com> (PHP port)
  * @license http://opensource.org/licenses/mit-license.php MIT License
  * @version 1.1.1 (2008-03-02)
- * @link https://github.com/rgrove/jsmin-php
+ * @link https://github.com/rgrove/jsmin-php/
  */
 
 class JSMin {
-  const ORD_LF	  = 10;
+  const ORD_LF    = 10;
   const ORD_SPACE = 32;
 
-  protected $a			 = '';
-  protected $b			 = '';
-  protected $input		 = '';
-  protected $inputIndex	 = 0;
+  protected $a           = '';
+  protected $b           = '';
+  protected $input       = '';
+  protected $inputIndex  = 0;
   protected $inputLength = 0;
-  protected $lookAhead	 = null;
-  protected $output		 = '';
+  protected $lookAhead   = null;
+  protected $output      = '';
 
   // -- Public Static Methods --------------------------------------------------
 
   public static function minify($js) {
-	$jsmin = new JSMin($js);
-	return $jsmin->min();
+    $jsmin = new JSMin($js);
+    return $jsmin->min();
   }
 
   // -- Public Instance Methods ------------------------------------------------
 
   public function __construct($input) {
-	$this->input	   = str_replace("\r\n", "\n", $input);
-	$this->inputLength = strlen($this->input);
+    $this->input       = str_replace("\r\n", "\n", $input);
+    $this->inputLength = strlen($this->input);
   }
 
   // -- Protected Instance Methods ---------------------------------------------
 
+
+
+  /* action -- do something! What you do is determined by the argument:
+          1   Output A. Copy B to A. Get the next B.
+          2   Copy B to A. Get the next B. (Delete A).
+          3   Get the next B. (Delete B).
+     action treats a string as a single character. Wow!
+     action recognizes a regular expression if it is preceded by ( or , or =.
+  */
   protected function action($d) {
-	switch($d) {
-	  case 1:
-		$this->output .= $this->a;
+    switch($d) {
+      case 1:
+        $this->output .= $this->a;
 
-	  case 2:
-		$this->a = $this->b;
+      case 2:
+        $this->a = $this->b;
 
-		if ($this->a === "'" || $this->a === '"') {
-		  for (;;) {
-			$this->output .= $this->a;
-			$this->a	   = $this->get();
+        if ($this->a === "'" || $this->a === '"') {
+          for (;;) {
+            $this->output .= $this->a;
+            $this->a       = $this->get();
 
-			if ($this->a === $this->b) {
-			  break;
-			}
+            if ($this->a === $this->b) {
+              break;
+            }
 
-			if (ord($this->a) <= self::ORD_LF) {
-			  throw new JSMinException('Unterminated string literal.');
-			}
+            if (ord($this->a) <= self::ORD_LF) {
+              throw new JSMinException('Unterminated string literal.');
+            }
 
-			if ($this->a === '\\') {
-			  $this->output .= $this->a;
-			  $this->a		 = $this->get();
-			}
-		  }
-		}
+            if ($this->a === '\\') {
+              $this->output .= $this->a;
+              $this->a       = $this->get();
+            }
+          }
+        }
 
-	  case 3:
-		$this->b = $this->next();
+      case 3:
+        $this->b = $this->next();
 
-		if ($this->b === '/' && (
-			$this->a === '(' || $this->a === ',' || $this->a === '=' ||
-			$this->a === ':' || $this->a === '[' || $this->a === '!' ||
-			$this->a === '&' || $this->a === '|' || $this->a === '?')) {
+        if ($this->b === '/' && (
+            $this->a === '(' || $this->a === ',' || $this->a === '=' ||
+            $this->a === ':' || $this->a === '[' || $this->a === '!' ||
+            $this->a === '&' || $this->a === '|' || $this->a === '?' ||
+            $this->a === '{' || $this->a === '}' || $this->a === ';' ||
+            $this->a === "\n" )) {
 
-		  $this->output .= $this->a . $this->b;
+          $this->output .= $this->a . $this->b;
 
-		  for (;;) {
-			$this->a = $this->get();
+          for (;;) {
+            $this->a = $this->get();
 
-			if ($this->a === '/') {
-			  break;
-			} elseif ($this->a === '\\') {
-			  $this->output .= $this->a;
-			  $this->a		 = $this->get();
-			} elseif (ord($this->a) <= self::ORD_LF) {
-			  throw new JSMinException('Unterminated regular expression '.
-				  'literal.');
-			}
+            if ($this->a === '[') {
+              /*
+                inside a regex [...] set, which MAY contain a '/' itself. Example: mootools Form.Validator near line 460:
+                  return Form.Validator.getValidator('IsEmpty').test(element) || (/^(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]\.?){0,63}[a-z0-9!#$%&'*+/=?^_`{|}~-]@(?:(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)*[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\])$/i).test(element.get('value'));
+              */
+              for (;;) {
+                $this->output .= $this->a;
+                $this->a = $this->get();
 
-			$this->output .= $this->a;
-		  }
+                if ($this->a === ']') {
+                    break;
+                } elseif ($this->a === '\\') {
+                  $this->output .= $this->a;
+                  $this->a       = $this->get();
+                } elseif (ord($this->a) <= self::ORD_LF) {
+                  throw new JSMinException('Unterminated regular expression set in regex literal.');
+                }
+              }
+            } elseif ($this->a === '/') {
+              break;
+            } elseif ($this->a === '\\') {
+              $this->output .= $this->a;
+              $this->a       = $this->get();
+            } elseif (ord($this->a) <= self::ORD_LF) {
+              throw new JSMinException('Unterminated regular expression literal.');
 
-		  $this->b = $this->next();
-		}
-	}
+            }
+
+            $this->output .= $this->a;
+          }
+
+          $this->b = $this->next();
+        }
+    }
   }
 
   protected function get() {
-	$c = $this->lookAhead;
-	$this->lookAhead = null;
+    $c = $this->lookAhead;
+    $this->lookAhead = null;
 
-	if ($c === null) {
-	  if ($this->inputIndex < $this->inputLength) {
-		$c = substr($this->input, $this->inputIndex, 1);
-		$this->inputIndex += 1;
-	  } else {
-		$c = null;
-	  }
-	}
+    if ($c === null) {
+      if ($this->inputIndex < $this->inputLength) {
+        $c = substr($this->input, $this->inputIndex, 1);
+        $this->inputIndex += 1;
+      } else {
+        $c = null;
+      }
+    }
 
-	if ($c === "\r") {
-	  return "\n";
-	}
+    if ($c === "\r") {
+      return "\n";
+    }
 
-	if ($c === null || $c === "\n" || ord($c) >= self::ORD_SPACE) {
-	  return $c;
-	}
+    if ($c === null || $c === "\n" || ord($c) >= self::ORD_SPACE) {
+      return $c;
+    }
 
-	return ' ';
+    return ' ';
   }
 
+  /* isAlphanum -- return true if the character is a letter, digit, underscore,
+        dollar sign, or non-ASCII character.
+  */
   protected function isAlphaNum($c) {
-	return ord($c) > 126 || $c === '\\' || preg_match('/^[\w\$]$/', $c) === 1;
+    return ord($c) > 126 || $c === '\\' || preg_match('/^[\w\$]$/', $c) === 1;
   }
 
   protected function min() {
-	$this->a = "\n";
-	$this->action(3);
+    $this->a = "\n";
+    $this->action(3);
 
-	while ($this->a !== null) {
-	  switch ($this->a) {
-		case ' ':
-		  if ($this->isAlphaNum($this->b)) {
-			$this->action(1);
-		  } else {
-			$this->action(2);
-		  }
-		  break;
+    while ($this->a !== null) {
+      switch ($this->a) {
+        case ' ':
+          if ($this->isAlphaNum($this->b)) {
+            $this->action(1);
+          } else {
+            $this->action(2);
+          }
+          break;
 
-		case "\n":
-		  switch ($this->b) {
-			case '{':
-			case '[':
-			case '(':
-			case '+':
-			case '-':
-			  $this->action(1);
-			  break;
+        case "\n":
+          switch ($this->b) {
+            case '{':
+            case '[':
+            case '(':
+            case '+':
+            case '-':
+              $this->action(1);
+              break;
 
-			case ' ':
-			  $this->action(3);
-			  break;
+            case ' ':
+              $this->action(3);
+              break;
 
-			default:
-			  if ($this->isAlphaNum($this->b)) {
-				$this->action(1);
-			  }
-			  else {
-				$this->action(2);
-			  }
-		  }
-		  break;
+            default:
+              if ($this->isAlphaNum($this->b)) {
+                $this->action(1);
+              }
+              else {
+                $this->action(2);
+              }
+          }
+          break;
 
-		default:
-		  switch ($this->b) {
-			case ' ':
-			  if ($this->isAlphaNum($this->a)) {
-				$this->action(1);
-				break;
-			  }
+        default:
+          switch ($this->b) {
+            case ' ':
+              if ($this->isAlphaNum($this->a)) {
+                $this->action(1);
+                break;
+              }
 
-			  $this->action(3);
-			  break;
+              $this->action(3);
+              break;
 
-			case "\n":
-			  switch ($this->a) {
-				case '}':
-				case ']':
-				case ')':
-				case '+':
-				case '-':
-				case '"':
-				case "'":
-				  $this->action(1);
-				  break;
+            case "\n":
+              switch ($this->a) {
+                case '}':
+                case ']':
+                case ')':
+                case '+':
+                case '-':
+                case '"':
+                case "'":
+                  $this->action(1);
+                  break;
 
-				default:
-				  if ($this->isAlphaNum($this->a)) {
-					$this->action(1);
-				  }
-				  else {
-					$this->action(3);
-				  }
-			  }
-			  break;
+                default:
+                  if ($this->isAlphaNum($this->a)) {
+                    $this->action(1);
+                  }
+                  else {
+                    $this->action(3);
+                  }
+              }
+              break;
 
-			default:
-			  $this->action(1);
-			  break;
-		  }
-	  }
-	}
+            default:
+              $this->action(1);
+              break;
+          }
+      }
+    }
 
-	return $this->output;
+    return $this->output;
   }
 
+  /* next -- get the next character, excluding comments. peek() is used to see
+             if a '/' is followed by a '/' or '*'.
+  */
   protected function next() {
-	$c = $this->get();
+    $c = $this->get();
 
-	if ($c === '/') {
-	  switch($this->peek()) {
-		case '/':
-		  for (;;) {
-			$c = $this->get();
+    if ($c === '/') {
+      switch($this->peek()) {
+        case '/':
+          for (;;) {
+            $c = $this->get();
 
-			if (ord($c) <= self::ORD_LF) {
-			  return $c;
-			}
-		  }
+            if (ord($c) <= self::ORD_LF) {
+              return $c;
+            }
+          }
 
-		case '*':
-		  $this->get();
+        case '*':
+          $this->get();
 
-		  for (;;) {
-			switch($this->get()) {
-			  case '*':
-				if ($this->peek() === '/') {
-				  $this->get();
-				  return ' ';
-				}
-				break;
+          for (;;) {
+            switch($this->get()) {
+              case '*':
+                if ($this->peek() === '/') {
+                  $this->get();
+                  return ' ';
+                }
+                break;
 
-			  case null:
-				throw new JSMinException('Unterminated comment.');
-			}
-		  }
+              case null:
+                throw new JSMinException('Unterminated comment.');
+            }
+          }
 
-		default:
-		  return $c;
-	  }
-	}
+        default:
+          return $c;
+      }
+    }
 
-	return $c;
+    return $c;
   }
 
   protected function peek() {
-	$this->lookAhead = $this->get();
-	return $this->lookAhead;
+    $this->lookAhead = $this->get();
+    return $this->lookAhead;
   }
 }
 
