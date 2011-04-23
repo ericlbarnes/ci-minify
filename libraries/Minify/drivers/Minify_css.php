@@ -36,30 +36,30 @@ class Minify_css extends CI_Driver {
 	 * @param	bool $compact
 	 * @return 	string
 	 */
-	public function min($file = '', $compact = TRUE, $isaggregated = NULL)
+	public function min($file = '', $compact = TRUE, $is_aggregated = NULL)
 	{
-		if ($file == '' OR !file_exists($file))
+		if ($file == '' OR ! file_exists($file))
 		{
-			log_message('error', 'Minify_css->min missing file ' . $file);
+			log_message('error', 'Minify_css->min missing file '.$file);
 			return FALSE;
 		}
 
-		if (!isset($isaggregated))
+		if ( ! isset($is_aggregated))
 		{
 			$contents = file_get_contents($file);
 		}
 		else
 		{
-			$contents = $this->removeCharsets(file_get_contents($file));
+			$contents = $this->remove_charsets(file_get_contents($file));
 		}
 
-		if ( $compact != FALSE )
+		if ($compact != FALSE)
 		{
-			return trim($this->_optimize($contents)) . "\n";
+			return trim($this->_optimize($contents))."\n";
 		}
 		else
 		{
-			return "\n" . trim($contents) . "\n\n";
+			return "\n".trim($contents)."\n\n";
 		}
 	}
 
@@ -70,14 +70,14 @@ class Minify_css extends CI_Driver {
 	 * charset declarations removal to support do combine function
 	 * in order to set a new one user defined charset at the beggining of the document
 	 * to keep standars compliance (and fix Webkit buggy behaviours)
+	 *
 	 * @author	F.S.Encinas
 	 * @param	string $contents
 	 * @return	string
 	 */
-	private function removeCharsets($contents)	{
-
+	private function remove_charsets($contents)
+	{
 		return preg_replace('/^@charset\s+[\'"](\S*)\b[\'"];/i', '', $contents);
-
 	}
 
 	// ------------------------------------------------------------------------
@@ -121,7 +121,7 @@ class Minify_css extends CI_Driver {
 			# - Colon: Retain :pseudo-selectors.
 			'| ([\(:])\s+' .
 			'>xS',
-			array(get_class($this), '_optimizeCB'),
+			array(get_class($this), '_optimize_call_back'),
 			$contents
 		);
 
@@ -132,19 +132,18 @@ class Minify_css extends CI_Driver {
 	 * Optimize CB
 	 * Optimize Callback Helper companion for optimize fn
 	 * based on Drupal 7 CSS Core aggregator
-	 * 
+	 *
 	 * @author	F.S.Encinas
 	 * @param	string $matches
 	 * @return 	array
 	 */
-	private function _optimizeCB($matches) {
-
+	private function _optimize_call_back($matches)
+	{
 		// Discard the full match.
 		unset($matches[0]);
 
 		// Use the non-empty match.
 		return current(array_filter($matches));
-
 	}
 }
 

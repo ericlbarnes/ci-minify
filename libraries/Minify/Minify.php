@@ -53,19 +53,19 @@ class Minify extends CI_Driver_Library {
 	 * @author	Eric Barnes, F.S.Encinas
 	 * @param	array $files
 	 * @param	string $type
-	 * @param	string $cssCharset
 	 * @param	bool $compact
-	 * @return 	void
+	 * @param	string $css_charset
+	 * @return 	mixed
 	 */
-	public function combine_files($files = array(), $type = '', $compact = TRUE, $cssCharset = 'utf-8')
+	public function combine_files($files = array(), $type = '', $compact = TRUE, $css_charset = 'utf-8')
 	{
-		if ( !is_array($files) OR count($files) < 1)
+		if ( ! is_array($files) OR count($files) < 1)
 		{
 			log_message('error', 'Minify->combine_files missing files array');
 			return FALSE;
 		}
 
-		return $this->_do_combine($files, $type, $compact, $cssCharset);
+		return $this->_do_combine($files, $type, $compact, $css_charset);
 	}
 
 	// ------------------------------------------------------------------------
@@ -78,11 +78,11 @@ class Minify extends CI_Driver_Library {
 	 * @param	string $directory
 	 * @param	array $ignore
 	 * @param	string $type
-	 * @param	string $cssCharset
 	 * @param	bool $compact
+	 * @param	string $css_charset
 	 * @return 	string
 	 */
-	public function combine_directory($directory = '', $ignore = array(), $type = '', $compact = TRUE, $cssCharset = 'utf-8')
+	public function combine_directory($directory = '', $ignore = array(), $type = '', $compact = TRUE, $css_charset = 'utf-8')
 	{
 		$available = array();
 
@@ -113,7 +113,7 @@ class Minify extends CI_Driver_Library {
 			}
 		}
 
-		return $this->_do_combine($available, $type, $compact, $cssCharset);
+		return $this->_do_combine($available, $type, $compact, $css_charset);
 	}
 
 	// ------------------------------------------------------------------------
@@ -126,47 +126,48 @@ class Minify extends CI_Driver_Library {
 	 * @author	Eric Barnes, F.S.Encinas
 	 * @param	array $files
 	 * @param	string $type
-	 * @param	string $cssCharset
 	 * @param	bool $compact
+	 * @param	string $css_charset
 	 * @return 	string
 	 */
-	private function _do_combine($files, $type, $compact = TRUE, $cssCharset = 'utf-8')
+	private function _do_combine($files, $type, $compact = TRUE, $css_charset = 'utf-8')
 	{
 		$contents = '';
-		$fileCount = 0;
+		$file_count = 0;
 
 		foreach ($files AS $file)
 		{
-			if ( !file_exists($file))
+			if ( ! file_exists($file))
 			{
-				log_message('error', 'Minify->_do_combine missing file ' . $file);
+				log_message('error', 'Minify->_do_combine missing file '.$file);
 				continue;
 			}
 
-			$fileCount++;
+			$file_count++;
 
 			if ($type == '')
 			{
 				$type = $this->_get_type($file);
 			}
 
-			$pathInf = pathinfo($file, PATHINFO_BASENAME); // Referal File and path
+			$path_info = pathinfo($file, PATHINFO_BASENAME); // Referal File and path
 
 			if ($type == 'css')
 			{
 				// only one charset placed at the beginning of the document is allowed
 				// in order to keep standars compliance and fixing Webkit problems
 				// Note: Minify_css driver yet remove all charsets previously
-				if ($fileCount == 1) {
-					$contents .= '@charset "'. $cssCharset .'";' . "\n";
+				if ($file_count == 1)
+				{
+					$contents .= '@charset "'.$css_charset.'";'."\n";
 				}
-				$contents .= "\n" . '/* @fileRef ' . $pathInf . ' */' . "\n";
-				$contents .= $this->css->min($file, $compact, $isaggregated = TRUE);
+				$contents .= "\n".'/* @fileRef '.$path_info.' */'."\n";
+				$contents .= $this->css->min($file, $compact, $is_aggregated = TRUE);
 			}
 			elseif ($type == 'js')
 			{
-				unset($cssCharset);
-				$contents .= "\n" . '// @fileRef ' . $pathInf . ' ' . "\n";
+				unset($css_charset);
+				$contents .= "\n".'// @fileRef '.$path_info.' '."\n";
 				$contents .= $this->js->min($file, $compact);
 			}
 			else
@@ -193,7 +194,7 @@ class Minify extends CI_Driver_Library {
 	{
 		$this->_ci->load->helper('file');
 
-		if ( !write_file($full_path, $contents))
+		if ( ! write_file($full_path, $contents))
 		{
 			log_message('error', 'Minify->save_file could not write file');
 			return FALSE;

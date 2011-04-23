@@ -49,14 +49,14 @@ echo $this->minify->combine_directory('test/css/, array('all.css'), [optionalPar
 
 Optional Params
 <pre>
-combine_files($files, [type], [compact], [cssCharset]);
-combine_directory($directory, [ignore], [type], [compact], [cssCharset]);
+combine_files($files, [type], [compact], [css_charset]);
+combine_directory($directory, [ignore], [type], [compact], [css_charset]);
 </pre>
 Common:
 <pre>
 [type]: string ('css' or 'js')
 [compact] : bool (TRUE, FALSE). TRUE Compact/compress output, FALSE doesn't compress output (only aggregation)
-[cssCharset] : string (default 'utf-8'). If CSS you can force a starting single charset declaration (when aggregate files)
+[css_charset] : string (default 'utf-8'). If CSS you can force a starting single charset declaration (when aggregate files)
                due to the charset pre-removal (for stantdars compliance and Webkit bugfix prevention)
                set to null or leave empty if JS.
 </pre>
@@ -66,5 +66,5 @@ Combine dir:
 </pre>
 
 ## Credits
-
+fsencinas - (https://github.com/fsencinas)
 JS-Min - (https://github.com/rgrove/jsmin-php)

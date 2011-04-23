@@ -47,13 +47,13 @@ class Minify_js extends CI_Driver {
 
 		$contents = file_get_contents($file);
 
-		if ( $compact != FALSE )
+		if ($compact != FALSE)
 		{
-			return trim(JSMin::minify($contents)) . "\n";
+			return trim(JSMin::minify($contents))."\n";
 		}
 		else
 		{
-			return "\n" . trim($contents) . "\n\n";
+			return "\n".trim($contents)."\n\n";
 		}
 	}
 }
