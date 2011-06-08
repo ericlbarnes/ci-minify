@@ -2,11 +2,11 @@
 /**
  * CodeIgniter Minify
  *
- * @package		ci-minify
- * @author		Eric Barnes
- * @copyright	Copyright (c) Eric Barnes
- * @since		Version 1.0
- * @link 		https://github.com/ericbarnes/ci-minify
+ * @package ci-minify
+ * @author Eric Barnes
+ * @copyright Copyright (c) Eric Barnes
+ * @since Version 1.0
+ * @link http://ericlbarnes.com
  */
 
 // ------------------------------------------------------------------------

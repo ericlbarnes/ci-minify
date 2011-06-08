@@ -2,12 +2,12 @@
 /**
  * CodeIgniter Minify
  *
- * @package		ci-minify
- * @author		Eric Barnes, F.S. Encinas
- * @copyright	Copyright (c) Eric Barnes
- * @since		Version 1.0
- * @link		https://github.com/ericbarnes/ci-minify
- *      		https://github.com/fsencinas/ci-minify/
+ * @package ci-minify
+ * @author Eric Barnes, F.S. Encinas
+ * @copyright Copyright (c) Eric Barnes
+ * @since Version 1.0
+ * @link http://ericlbarnes.com
+ * @link https://github.com/fsencinas/ci-minify/
  */
 
 // ------------------------------------------------------------------------
@@ -19,6 +19,11 @@
  */
 class Minify extends CI_Driver_Library {
 
+	/**
+	 * CI Object
+	 * 
+	 * @var object
+	 */
 	protected $_ci = '';
 
 	/**
@@ -35,10 +40,9 @@ class Minify extends CI_Driver_Library {
 	 *
 	 * Initialize params
 	 *
-	 * @param	array
-	 * @return 	void
+	 * @return \Minify
 	 */
-	public function __construct($params = array())
+	public function __construct()
 	{
 		$this->_ci =& get_instance();
 		log_message('debug', 'CI-Minify: Library initialized.');
@@ -50,12 +54,12 @@ class Minify extends CI_Driver_Library {
 	 * Combine Files
 	 *
 	 * Pass an array of files and combine them.
-	 * @author	Eric Barnes, F.S.Encinas
-	 * @param	array $files
-	 * @param	string $type
-	 * @param	bool $compact
-	 * @param	string $css_charset
-	 * @return 	mixed
+	 * @author Eric Barnes, F.S.Encinas
+	 * @param array $files
+	 * @param string $type
+	 * @param bool $compact
+	 * @param string $css_charset
+	 * @return mixed
 	 */
 	public function combine_files($files = array(), $type = '', $compact = TRUE, $css_charset = 'utf-8')
 	{
@@ -75,12 +79,12 @@ class Minify extends CI_Driver_Library {
 	 *
 	 * Pass a directory and combine all the files into one string.
 	 *
-	 * @param	string $directory
-	 * @param	array $ignore
-	 * @param	string $type
-	 * @param	bool $compact
-	 * @param	string $css_charset
-	 * @return 	string
+	 * @param string $directory
+	 * @param array $ignore
+	 * @param string $type
+	 * @param bool $compact
+	 * @param string $css_charset
+	 * @return string
 	 */
 	public function combine_directory($directory = '', $ignore = array(), $type = '', $compact = TRUE, $css_charset = 'utf-8')
 	{
@@ -123,12 +127,12 @@ class Minify extends CI_Driver_Library {
 	 *
 	 * Combine all the files and return a string.
 	 *
-	 * @author	Eric Barnes, F.S.Encinas
-	 * @param	array $files
-	 * @param	string $type
-	 * @param	bool $compact
-	 * @param	string $css_charset
-	 * @return 	string
+	 * @author Eric Barnes, F.S.Encinas
+	 * @param array $files
+	 * @param string $type
+	 * @param bool $compact
+	 * @param string $css_charset
+	 * @return string
 	 */
 	private function _do_combine($files, $type, $compact = TRUE, $css_charset = 'utf-8')
 	{
@@ -186,9 +190,9 @@ class Minify extends CI_Driver_Library {
 	 *
 	 * Save a file
 	 *
-	 * @param	string $contents
-	 * @param	string $full_path
-	 * @return 	bool
+	 * @param string $contents
+	 * @param string $full_path
+	 * @return bool
 	 */
 	public function save_file($contents = '', $full_path = '')
 	{
@@ -209,8 +213,8 @@ class Minify extends CI_Driver_Library {
 	 *
 	 * Get the file extension to determine file type
 	 *
-	 * @param	string $file
-	 * @return 	string
+	 * @param string $file
+	 * @return string
 	 */
 	private function _get_type($file)
 	{

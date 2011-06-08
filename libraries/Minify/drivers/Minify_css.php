@@ -2,12 +2,12 @@
 /**
  * CodeIgniter Minify
  *
- * @package		ci-minify
- * @author		Eric Barnes, F.S. Encinas
- * @copyright	Copyright (c) Eric Barnes
- * @since		Version 1.0
- * @link		https://github.com/ericbarnes/ci-minify
- *      		https://github.com/fsencinas/ci-minify/
+ * @package ci-minify
+ * @author Eric Barnes, F.S. Encinas
+ * @copyright Copyright (c) Eric Barnes
+ * @since Version 1.0
+ * @link http://ericlbarnes.com
+ * @link https://github.com/fsencinas/ci-minify/
  */
 
 // ------------------------------------------------------------------------
@@ -19,6 +19,11 @@
  */
 class Minify_css extends CI_Driver {
 
+	/**
+	 * Constructor
+	 *
+	 * @return \Minify_css
+	 */
 	public function __construct()
 	{
 		log_message('debug', 'Minify CSS Initialized');
@@ -31,10 +36,10 @@ class Minify_css extends CI_Driver {
 	 *
 	 * Minify a CSS file
 	 *
-	 * @author	F.S.Encinas
-	 * @param	string $file
-	 * @param	bool $compact
-	 * @return 	string
+	 * @param string $file
+	 * @param bool $compact
+	 * @param null $is_aggregated
+	 * @return string
 	 */
 	public function min($file = '', $compact = TRUE, $is_aggregated = NULL)
 	{
@@ -67,13 +72,14 @@ class Minify_css extends CI_Driver {
 
 	/**
 	 * Remove charsets
-	 * charset declarations removal to support do combine function
+	 *
+	 * Charset declarations removal to support do combine function
 	 * in order to set a new one user defined charset at the beggining of the document
 	 * to keep standars compliance (and fix Webkit buggy behaviours)
 	 *
-	 * @author	F.S.Encinas
-	 * @param	string $contents
-	 * @return	string
+	 * @author F.S.Encinas
+	 * @param string $contents
+	 * @return string
 	 */
 	private function remove_charsets($contents)
 	{
@@ -86,9 +92,10 @@ class Minify_css extends CI_Driver {
 	 * Optimize
 	 * Optimize the contents of a css file
 	 * based on Drupal 7 CSS Core aggregator
-	 * @author	F.S.Encinas
-	 * @param	string $contents
-	 * @return 	string
+	 *
+	 * @author F.S.Encinas
+	 * @param string $contents
+	 * @return string
 	 */
 	private function _optimize($contents)
 	{
@@ -133,9 +140,9 @@ class Minify_css extends CI_Driver {
 	 * Optimize Callback Helper companion for optimize fn
 	 * based on Drupal 7 CSS Core aggregator
 	 *
-	 * @author	F.S.Encinas
-	 * @param	string $matches
-	 * @return 	array
+	 * @author F.S.Encinas
+	 * @param string $matches
+	 * @return array
 	 */
 	private function _optimize_call_back($matches)
 	{

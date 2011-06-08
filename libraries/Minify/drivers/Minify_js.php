@@ -2,12 +2,11 @@
 /**
  * CodeIgniter Minify
  *
- * @package		ci-minify
- * @author		Eric Barnes, F.S.Encinas
- * @copyright	Copyright (c) Eric Barnes
- * @since		Version 1.0
- * @link 		https://github.com/ericbarnes/ci-minify
- *       		https://github.com/fsencinas/ci-minify
+ * @package ci-minify
+ * @author Eric Barnes, F.S.Encinas
+ * @copyright Copyright (c) Eric Barnes
+ * @since Version 1.0
+ * @link http://ericlbarnes.com
  */
 
 // ------------------------------------------------------------------------
@@ -15,12 +14,23 @@
 /**
  * Minify JS Driver
  *
- * @subpackage	Drivers
+ * @subpackage Drivers
  */
 class Minify_js extends CI_Driver {
 
+	/**
+	 * CI Object
+	 * @var object
+	 */
 	protected $_ci = '';
 
+	// ------------------------------------------------------------------------
+
+	/**
+	 * Constructor
+	 *
+	 * @return \Minify_js
+	 */
 	public function __construct()
 	{
 		$this->_ci =& get_instance();
@@ -34,8 +44,9 @@ class Minify_js extends CI_Driver {
 	 *
 	 * Minify a js file
 	 *
-	 * @param	string $file
-	 * @return 	string
+	 * @param string $file
+	 * @param bool $compact
+	 * @return  string
 	 */
 	public function min($file = '', $compact = TRUE)
 	{
