@@ -2,12 +2,24 @@
 /**
  * CodeIgniter Minify
  *
- * @package ci-minify
- * @author Eric Barnes, F.S. Encinas
- * @copyright Copyright (c) Eric Barnes
- * @since Version 1.0
- * @link http://ericlbarnes.com
- * @link https://github.com/fsencinas/ci-minify/
+ * A minification driver system for CodeIgniter
+ *
+ * NOTICE OF LICENSE
+ *
+ * Licensed under the Open Software License version 3.0
+ *
+ * This source file is subject to the Open Software License (OSL 3.0) that is
+ * bundled with this package in the files license.txt / license.rst.  It is
+ * also available through the world wide web at this URL:
+ * http://opensource.org/licenses/OSL-3.0
+ *
+ * @package     ci-minify
+ * @author      Eric Barnes
+ * @copyright   Copyright (c) Eric Barnes. (http://ericlbarnes.com/)
+ * @license     http://opensource.org/licenses/OSL-3.0 Open Software License (OSL 3.0)
+ * @link        http://ericlbarnes.com
+ * @since       Version 1.0
+ * @filesource
  */
 
 // ------------------------------------------------------------------------
@@ -77,7 +89,6 @@ class Minify_css extends CI_Driver {
 	 * in order to set a new one user defined charset at the beggining of the document
 	 * to keep standars compliance (and fix Webkit buggy behaviours)
 	 *
-	 * @author F.S.Encinas
 	 * @param string $contents
 	 * @return string
 	 */
@@ -93,7 +104,6 @@ class Minify_css extends CI_Driver {
 	 * Optimize the contents of a css file
 	 * based on Drupal 7 CSS Core aggregator
 	 *
-	 * @author F.S.Encinas
 	 * @param string $contents
 	 * @return string
 	 */
@@ -135,12 +145,13 @@ class Minify_css extends CI_Driver {
 		return $contents;
 	}
 
+	// ------------------------------------------------------------------------
+
 	/**
 	 * Optimize CB
 	 * Optimize Callback Helper companion for optimize fn
 	 * based on Drupal 7 CSS Core aggregator
 	 *
-	 * @author F.S.Encinas
 	 * @param string $matches
 	 * @return array
 	 */

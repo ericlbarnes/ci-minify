@@ -2,12 +2,24 @@
 /**
  * CodeIgniter Minify
  *
- * @package ci-minify
- * @author Eric Barnes, F.S. Encinas
- * @copyright Copyright (c) Eric Barnes
- * @since Version 1.0
- * @link http://ericlbarnes.com
- * @link https://github.com/fsencinas/ci-minify/
+ * A minification driver system for CodeIgniter
+ *
+ * NOTICE OF LICENSE
+ *
+ * Licensed under the Open Software License version 3.0
+ *
+ * This source file is subject to the Open Software License (OSL 3.0) that is
+ * bundled with this package in the files license.txt / license.rst.  It is
+ * also available through the world wide web at this URL:
+ * http://opensource.org/licenses/OSL-3.0
+ *
+ * @package     ci-minify
+ * @author      Eric Barnes
+ * @copyright   Copyright (c) Eric Barnes. (http://ericlbarnes.com/)
+ * @license     http://opensource.org/licenses/OSL-3.0 Open Software License (OSL 3.0)
+ * @link        http://ericlbarnes.com
+ * @since       Version 1.0
+ * @filesource
  */
 
 // ------------------------------------------------------------------------
@@ -21,7 +33,7 @@ class Minify extends CI_Driver_Library {
 
 	/**
 	 * CI Object
-	 * 
+	 *
 	 * @var object
 	 */
 	protected $_ci = '';
@@ -54,7 +66,6 @@ class Minify extends CI_Driver_Library {
 	 * Combine Files
 	 *
 	 * Pass an array of files and combine them.
-	 * @author Eric Barnes, F.S.Encinas
 	 * @param array $files
 	 * @param string $type
 	 * @param bool $compact
@@ -127,7 +138,6 @@ class Minify extends CI_Driver_Library {
 	 *
 	 * Combine all the files and return a string.
 	 *
-	 * @author Eric Barnes, F.S.Encinas
 	 * @param array $files
 	 * @param string $type
 	 * @param bool $compact
