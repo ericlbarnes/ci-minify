@@ -94,7 +94,7 @@ class Minify_css extends CI_Driver {
 	 */
 	private function remove_charsets($contents)
 	{
-		return preg_replace('/^@charset\s+[\'"](\S*)\b[\'"];/i', '', $contents);
+		return preg_replace('/^\s*@charset\s+[\'"](?:\S*)\b[\'"];/i', '', $contents);
 	}
 
 	// ------------------------------------------------------------------------
