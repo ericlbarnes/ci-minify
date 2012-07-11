@@ -26,6 +26,13 @@ $file = 'test/css/test1.css';
 echo $this->minify->css->min($file);
 </pre>
 
+Minify String
+<pre>
+$this->load->driver('minify');
+$content = 'body{ padding:0; margin: 0}';
+echo $this->minify->css->min($content);
+</pre>
+
 Minify and combine an array of files. Useful if you need files to be in a certain order.
 <pre>
 $this->load->driver('minify');
