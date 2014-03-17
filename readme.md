@@ -1,5 +1,7 @@
 # CodeIgniter Minify
 
+Please note **this project is no longer maintained**. 
+
 The goal of this project is to provide a simple way to minify and combine js and css files inside a CodeIgniter application. Currently other systems
 exists but I wanted the compression to be part of my build process. So on deployments I compress and minify all the js and css. Then push off to s3
 but this could also be useful to write them to a single file.
